@@ -1,3 +1,5 @@
 node_modules
 eng.traineddata
 chi_sim.traineddata
+tesseract.js-ocr-result.pdf
+uploads/.DS_Store

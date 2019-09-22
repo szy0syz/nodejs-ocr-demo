@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single('avater');
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 // Routes
 app.get('/', (_, res) => {
@@ -29,17 +30,23 @@ app.post('/upload', (req, res) => {
       if (err) return console.error(err);
 
       worker
-        .recognize(data, 'eng', { tessjs_create_pdf: '1' })
+        .recognize(data, 'chi_sim', { tessjs_create_pdf: '1' })
         .progress(pro => {
           console.log(pro);
         })
         .then(result => {
           console.log('[**] text:', result.text);
-          res.send(result.text);
+          // res.send(result.text);
+          res.redirect('/download');
         })
         .finally(() => worker.terminate());
     });
   });
+});
+
+app.get('/download', (req, res) => {
+  const file = `${__dirname}/tesseract.js-ocr-result.pdf`;
+  res.download(file);
 });
 
 const PORT = process.env.PORT || 5000;
